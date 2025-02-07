@@ -938,14 +938,31 @@ $(document).ready(function () {
     }
 
     // Fitur pencarian multiple
-    $("#search-violation").on("input", function () {
-        let searchTerm = $(this).val().toLowerCase();
-        let filteredData = jsonData.filter(charge =>
-            charge.code.toLowerCase().includes(searchTerm) ||
-            charge.name.toLowerCase().includes(searchTerm)
-        );
-        renderViolations(filteredData);
-    });
+        let debounceTimer;
+      $("#search-violation").on("input", function () {
+         clearTimeout(debounceTimer);
+         debounceTimer = setTimeout(() => {
+            let searchTerm = $(this).val().toLowerCase().trim();
+ 
+            // If input is empty, show all results
+            if (!searchTerm) {
+                  renderViolations(jsonData);
+                  return;
+            }
+ 
+            // Split input by comma, remove empty spaces
+            let searchTerms = searchTerm.split(",").map(term => term.trim()).filter(term => term);
+ 
+            let filteredData = jsonData.filter(charge => 
+                  searchTerms.some(term => 
+                     charge.code.toLowerCase().includes(term) || 
+                     charge.name.toLowerCase().includes(term)
+                  )
+            );
+ 
+            renderViolations(filteredData);
+         }, 10); // Debounce to improve performance
+      });
     
     // Tombol Clear All
     $("#clear-violations").click(function () {
