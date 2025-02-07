@@ -99,3 +99,19 @@ body {
     padding: 0.5rem;
     font-size: 0.85em;
 }
+
+/* Tombol Clear Search */
+#clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #6c757d;
+    z-index: 100;
+}
+
+#clear-search:hover {
+    color: #ffffff;
+}
