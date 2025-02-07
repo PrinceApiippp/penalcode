@@ -937,6 +937,7 @@ $(document).ready(function () {
         $("#arrest").val(command);
     }
 
+    
     // Fitur pencarian multiple
         let debounceTimer;
       $("#search-violation").on("input", function () {
@@ -963,7 +964,23 @@ $(document).ready(function () {
             renderViolations(filteredData);
          }, 10); // Debounce to improve performance
       });
-    
+
+
+// Fungsi untuk menampilkan/menyembunyikan tombol X
+$("#search-violation").on("input", function () {
+    if ($(this).val().trim() !== "") {
+        $("#clear-search").removeClass("d-none");
+    } else {
+        $("#clear-search").addClass("d-none");
+    }
+});
+
+// Fungsi untuk menghapus input dan menyembunyikan tombol X
+$("#clear-search").click(function () {
+    $("#search-violation").val("").trigger("input"); // Kosongkan input dan trigger event input
+    renderViolations(jsonData); // Tampilkan semua data
+});
+
     // Tombol Clear All
     $("#clear-violations").click(function () {
         $("#violate-select tbody").empty();
