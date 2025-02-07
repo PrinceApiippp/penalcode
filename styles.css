@@ -115,3 +115,13 @@ body {
 #clear-search:hover {
     color: #ffffff;
 }
+
+/* Logo instagram */
+a img {
+    border-radius: 30%;
+    transition: transform 0.3s ease;
+}
+
+a img:hover {
+    transform: scale(1.1);
+}
