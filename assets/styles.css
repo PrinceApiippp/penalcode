@@ -87,11 +87,22 @@ body {
 
 /* Tombol Scroll to Top */
 .scroll-to-top {
+    display: none;
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    display: none;
-    z-index: 1000;
+    right: 30px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 20%;
+    padding: 10px 15px; /* Membuat tombol lebih besar */
+    font-size: 20px; /* Membesarkan teks */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+}
+.scroll-to-top:hover {
+    transform: scale(1.1);
 }
 
 /* Perkecil bar violation */

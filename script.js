@@ -990,16 +990,16 @@ $("#clear-search").click(function () {
 
     // Tombol Scroll to Top
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $("#scroll-to-top").fadeIn();
-        } else {
-            $("#scroll-to-top").fadeOut();
-        }
-    });
+      if ($(this).scrollTop() > 100) {
+          $("#scroll-to-top").fadeIn();
+      } else {
+          $("#scroll-to-top").fadeOut();
+      }
+  });
 
-    $("#scroll-to-top").click(function () {
-        $("html, body").animate({ scrollTop: 0 }, 500);
-    });
+  $("#scroll-to-top").click(function () {
+      $("html, body").animate({ scrollTop: 0 }, 500);
+  });
 
         // Event listener untuk tombol "Apply"
     $(".btn-primary").click(function () {
