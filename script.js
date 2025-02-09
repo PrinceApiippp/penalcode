@@ -891,58 +891,56 @@ $(document).ready(function () {
        });
    }
 
-   // Fungsi untuk menambahkan pelanggaran ke tabel yang dipilih
-  // Fungsi untuk menambahkan pelanggaran ke tabel yang dipilih
+// Fungsi untuk menambahkan pelanggaran ke tabel yang dipilih
 function addViolation(charge) {
-    let selectedTableBody = $("#violate-select tbody");
-    let suspectId = $("#suspectid").val();
+   let selectedTableBody = $("#violate-select tbody");
+   let suspectId = $("#suspectid").val();
 
-    let newRow = $("<tr></tr>");
-    newRow.append($("<td></td>").text(charge.code));
-    newRow.append($("<td></td>").text(charge.name));
-    newRow.append($("<td></td>").text(charge.jailtime));
-    newRow.append($("<td></td>").text(charge.fine));
-    newRow.append($("<td></td>").text(charge.bail));
+   let newRow = $("<tr></tr>");
+   newRow.append($("<td></td>").text(charge.code));
+   newRow.append($("<td></td>").text(charge.name));
+   newRow.append($("<td></td>").text(charge.jailtime));
+   newRow.append($("<td></td>").text(charge.fine));
+   newRow.append($("<td></td>").text(charge.bail));
 
-    let actionCell = $("<td></td>");
-    let copyButton = $('<button type="button" class="btn btn-sm btn-info me-2">Copy</button>')
-        .click(function () {
-            let command = charge.jailtime === "0" && charge.bail === "0" ?
-                `/ticket ${suspectId} ${charge.fine} ${charge.code} ${charge.name}` :
-                `/su ${suspectId} ${charge.code} ${charge.name}`;
-            navigator.clipboard.writeText(command).then(function () {
-                ;
-            });
-        });
-    let removeButton = $('<button type="button" class="btn btn-sm btn-danger">Remove</button>')
-        .click(function () {
-            newRow.remove();
-            updateArrestCommand();
-            $(`button[data-code="${charge.code}"]`).prop("disabled", false); // Aktifkan tombol "Add"
-        });
-    actionCell.append(copyButton).append(removeButton);
-    newRow.append(actionCell);
+   let actionCell = $("<td></td>");
+   let copyButton = $('<button type="button" class="btn btn-sm btn-info me-2">Copy</button>')
+       .click(function () {
+           let command = charge.jailtime === "0" && charge.bail === "0" ?
+               `/ticket ${suspectId} ${charge.fine} ${charge.code} ${charge.name}` :
+               `/su ${suspectId} ${charge.code} ${charge.name}`;
+           navigator.clipboard.writeText(command).then(function () {
+               ;
+           });
+       });
+   let removeButton = $('<button type="button" class="btn btn-sm btn-danger">Remove</button>')
+       .click(function () {
+           newRow.remove();
+           updateArrestCommand();
+           $(`button[data-code="${charge.code}"]`).prop("disabled", false); // Aktifkan tombol "Add"
+       });
+   actionCell.append(copyButton).append(removeButton);
+   newRow.append(actionCell);
 
-    selectedTableBody.append(newRow);
-    sortTable(); // Urutkan tabel setelah menambahkan baris baru
-    updateArrestCommand();
+   selectedTableBody.append(newRow);
+   sortTable(); // Urutkan tabel setelah menambahkan baris baru
+   updateArrestCommand();
 }
 
 // Fungsi untuk mengurutkan tabel berdasarkan kode
 function sortTable() {
-    let rows = $("#violate-select tbody tr").get();
+   let rows = $("#violate-select tbody tr").get();
 
-    rows.sort(function (a, b) {
-        let codeA = $(a).find("td:first").text().toUpperCase();
-        let codeB = $(b).find("td:first").text().toUpperCase();
-        return codeA.localeCompare(codeB, undefined, { numeric: true, sensitivity: 'base' });
-    });
+   rows.sort(function (a, b) {
+       let codeA = $(a).find("td:first").text().toUpperCase();
+       let codeB = $(b).find("td:first").text().toUpperCase();
+       return codeA.localeCompare(codeB, undefined, { numeric: true, sensitivity: 'base' });
+   });
 
-    $.each(rows, function (index, row) {
-        $("#violate-select tbody").append(row);
-    });
+   $.each(rows, function (index, row) {
+       $("#violate-select tbody").append(row);
+   });
 }
-
        // Fungsi untuk menambahkan semua hasil pencarian ke daftar yang dipilih
    $("#add-all").click(function () {
        $("#violate-data tbody tr").each(function () {
