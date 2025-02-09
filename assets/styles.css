@@ -85,6 +85,15 @@ body {
     border-color: #007bff;
 }
 
+input::placeholder {
+    color: #6c757d; /* Warna abu-abu terang agar terlihat jelas di dark mode */
+    opacity: 1; /* Pastikan opacity 100% */
+  }
+
+  input:focus::placeholder {
+    color: #adb5bd; /* Warna sedikit lebih terang saat input fokus */
+  }
+  
 /* Tombol Scroll to Top */
 .scroll-to-top {
     display: none;
