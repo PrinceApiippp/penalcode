@@ -148,11 +148,10 @@ button {
 button:hover {
     transform: translateY(-3px) scale(1);
     filter: brightness(1.15);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
 }
 
 /* Efek saat tombol ditekan */
 button:active {
     transform: translateY(1px) scale(0.97);
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.15);
 }
+

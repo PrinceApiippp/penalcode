@@ -1015,29 +1015,46 @@ $("#clear-search").click(function () {
 $("#clear-violations").click(function () {
     if ($("#violate-select tbody tr").length === 0) {
         Swal.fire({
-            title: "Oops!",
+            title: "❌ Oops!",
             text: "Tidak ada data yang bisa dihapus.",
             icon: "info",
-            confirmButtonText: "OK"
+            background: "#1e1e1e",
+            color: "#fff",
+            confirmButtonColor: "#ffc107"
         });
         return;
     }
 
     Swal.fire({
-        title: "Are you sure?",
+        title: "⚠️ Are you sure?",
         text: "Kamu yakin ingin menghapus semua data?",
         icon: "warning",
+        background: "#1e1e1e",
+        color: "#fff",
         showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#dc3545",
         confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel"
     }).then((result) => {
         if (result.isConfirmed) {
-            $("#violate-select tbody").empty();
-            updateArrestCommand();
-            Swal.fire("Deleted!", "Semua data telah dihapus.", "success");
+            $("#violate-select tbody").empty(); // Kosongkan daftar
+            updateArrestCommand(); // Perbarui command
+            $(".btn-success").prop("disabled", false); // Aktifkan kembali semua tombol "Add"
+
+            Swal.fire({
+                title: "✅ Deleted!",
+                text: "Semua data telah dihapus.",
+                icon: "success",
+                background: "#1e1e1e",
+                color: "#fff",
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
     });
 });
+
 
    // Tombol Scroll to Top
    $(window).scroll(function () {
@@ -1095,12 +1112,14 @@ $("#clear-violations").click(function () {
 $("#copy-all-codes").click(function () {
     if ($("#violate-select tbody tr").length === 0) {
         Swal.fire({
-            title: "Oops!",
+            title: "⚠️ Oops!",
             text: "Tidak ada data yang bisa disalin.",
             icon: "warning",
-            confirmButtonText: "OK"
+            background: "#1e1e1e",
+            color: "#fff",
+            confirmButtonColor: "#28a745"
         });
-        return; // Hentikan fungsi biar tidak error
+        return;
     }
 
     let codes = [];
@@ -1111,9 +1130,11 @@ $("#copy-all-codes").click(function () {
     let formattedCodes = codes.join(", ") + ".";
     navigator.clipboard.writeText(formattedCodes).then(() => {
         Swal.fire({
-            title: "Copied!",
-            text: "Kode pelanggaran telah disalin: " + formattedCodes,
+            title: "✅ Copied!",
+            text: "Kode telah disalin: " + formattedCodes,
             icon: "success",
+            background: "#1e1e1e",
+            color: "#fff",
             timer: 2000,
             showConfirmButton: false
         });
