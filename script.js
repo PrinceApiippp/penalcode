@@ -1012,11 +1012,32 @@ $("#clear-search").click(function () {
 });
 
    // Tombol Clear All
-   $("#clear-violations").click(function () {
-       $("#violate-select tbody").empty();
-       updateArrestCommand();
-       $(".btn-success").prop("disabled", false); // Aktifkan semua tombol "Add"
-   });
+$("#clear-violations").click(function () {
+    if ($("#violate-select tbody tr").length === 0) {
+        Swal.fire({
+            title: "Oops!",
+            text: "Tidak ada data yang bisa dihapus.",
+            icon: "info",
+            confirmButtonText: "OK"
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Kamu yakin ingin menghapus semua data?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $("#violate-select tbody").empty();
+            updateArrestCommand();
+            Swal.fire("Deleted!", "Semua data telah dihapus.", "success");
+        }
+    });
+});
 
    // Tombol Scroll to Top
    $(window).scroll(function () {
@@ -1067,4 +1088,34 @@ $("#clear-search").click(function () {
 
    // Render data awal
    renderViolations(jsonData);
+});
+
+
+// Fungsi untuk menyalin semua kode pelanggaran dari tabel Selected Violations
+$("#copy-all-codes").click(function () {
+    if ($("#violate-select tbody tr").length === 0) {
+        Swal.fire({
+            title: "Oops!",
+            text: "Tidak ada data yang bisa disalin.",
+            icon: "warning",
+            confirmButtonText: "OK"
+        });
+        return; // Hentikan fungsi biar tidak error
+    }
+
+    let codes = [];
+    $("#violate-select tbody tr").each(function () {
+        codes.push($(this).find("td:first").text().replace(/\./g, "")); // Hapus titik
+    });
+
+    let formattedCodes = codes.join(", ") + ".";
+    navigator.clipboard.writeText(formattedCodes).then(() => {
+        Swal.fire({
+            title: "Copied!",
+            text: "Kode pelanggaran telah disalin: " + formattedCodes,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false
+        });
+    });
 });
