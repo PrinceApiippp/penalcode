@@ -155,3 +155,12 @@ button:active {
     transform: translateY(1px) scale(0.97);
 }
 
+/* Pastikan konten dalam sel tabel berada di tengah vertikal */
+#violate-data tbody td, #violate-select tbody td {
+    vertical-align: middle;
+}
+
+/* Pastikan setiap baris tabel memiliki tinggi yang konsisten */
+#violate-data tbody tr, #violate-select tbody tr {
+    height: 50px; /* Sesuaikan tinggi sesuai kebutuhan */
+}
