@@ -941,6 +941,7 @@ function sortTable() {
        $("#violate-select tbody").append(row);
    });
 }
+
        // Fungsi untuk menambahkan semua hasil pencarian ke daftar yang dipilih
    $("#add-all").click(function () {
        $("#violate-data tbody tr").each(function () {
