@@ -1085,26 +1085,25 @@ $("#clear-violations").click(function () {
      $("html, body").animate({ scrollTop: 0 }, 500);
  });
 
-       // Event listener untuk tombol "Apply"
-   $(".btn-primary").click(function () {
-       let newSuspectId = $("#suspectid").val();
-       updateArrestCommand(); // Perbarui perintah /arrest atau /ticket
+     // Event listener untuk input suspectid (auto-apply)
+     $("#suspectid").on("input", function () {
+      updateArrestCommand(); // Perbarui perintah /arrest atau /ticket
 
-       // Perbarui ID suspect di semua pelanggaran yang sudah dipilih
-       $("#violate-select tbody tr").each(function () {
-           let charge = {
-               code: $(this).find("td:nth-child(1)").text(),
-               name: $(this).find("td:nth-child(2)").text(),
-               jailtime: $(this).find("td:nth-child(3)").text(),
-               fine: $(this).find("td:nth-child(4)").text(),
-               bail: $(this).find("td:nth-child(5)").text()
-           };
+      // Perbarui ID suspect di semua pelanggaran yang sudah dipilih
+      $("#violate-select tbody tr").each(function () {
+          let charge = {
+              code: $(this).find("td:nth-child(1)").text(),
+              name: $(this).find("td:nth-child(2)").text(),
+              jailtime: $(this).find("td:nth-child(3)").text(),
+              fine: $(this).find("td:nth-child(4)").text(),
+              bail: $(this).find("td:nth-child(5)").text()
+          };
 
-           // Perbarui tombol "Copy" dengan ID suspect yang baru
-           $(this).find(".btn-info").off("click").click(function () {
+            // Perbarui tombol "Copy" dengan ID suspect yang baru
+            $(this).find(".btn-info").off("click").click(function () {
                let command = charge.jailtime === "0" && charge.bail === "0" ?
-                   `/ticket ${newSuspectId} ${charge.fine} ${charge.code} ${charge.name}` :
-                   `/su ${newSuspectId} ${charge.code} ${charge.name}`;
+                   `/ticket ${$("#suspectid").val()} ${charge.fine} ${charge.code} ${charge.name}` :
+                   `/su ${$("#suspectid").val()} ${charge.code} ${charge.name}`;
                navigator.clipboard.writeText(command).then(function () {
                    ;
                });
