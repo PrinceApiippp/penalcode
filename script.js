@@ -924,7 +924,7 @@ function addViolation(charge) {
 
    selectedTableBody.append(newRow);
    sortTable(); // Urutkan tabel setelah menambahkan baris baru
-   updateArrestCommand();
+   updateArrestCommand(); // Update total summary
 }
 
 // Fungsi untuk mengurutkan tabel berdasarkan kode
@@ -943,46 +943,53 @@ function sortTable() {
 }
 
        // Fungsi untuk menambahkan semua hasil pencarian ke daftar yang dipilih
-   $("#add-all").click(function () {
-       $("#violate-data tbody tr").each(function () {
-           let code = $(this).find("td:nth-child(1)").text();
-           if ($(`#violate-select tbody tr td:first-child:contains('${code}')`).length === 0) {
-               let charge = {
-                   code: code,
-                   name: $(this).find("td:nth-child(2)").text(),
-                   jailtime: $(this).find("td:nth-child(3)").text(),
-                   fine: $(this).find("td:nth-child(4)").text(),
-                   bail: $(this).find("td:nth-child(5)").text()
-               };
-               addViolation(charge);
-               $(`button[data-code="${charge.code}"]`).prop("disabled", true);
-           }
-       });
-   });
-
+       $("#add-all").click(function () {
+         $("#violate-data tbody tr").each(function () {
+             let code = $(this).find("td:nth-child(1)").text();
+             if ($(`#violate-select tbody tr td:first-child:contains('${code}')`).length === 0) {
+                 let charge = {
+                     code: code,
+                     name: $(this).find("td:nth-child(2)").text(),
+                     jailtime: $(this).find("td:nth-child(3)").text(),
+                     fine: $(this).find("td:nth-child(4)").text(),
+                     bail: $(this).find("td:nth-child(5)").text()
+                 };
+                 addViolation(charge);
+                 $(`button[data-code="${charge.code}"]`).prop("disabled", true);
+             }
+         });
+         updateArrestCommand(); // Update total summary
+     });
    // Fungsi untuk memperbarui perintah /arrest atau /ticket
    function updateArrestCommand() {
-       let totalJailtime = 0;
-       let totalFine = 0;
-       let totalBail = 0;
-
-       $("#violate-select tbody tr").each(function () {
-           totalJailtime += parseInt($(this).find("td:nth-child(3)").text(), 10);
-           totalFine += parseInt($(this).find("td:nth-child(4)").text(), 10);
-           totalBail += parseInt($(this).find("td:nth-child(5)").text(), 10);
-       });
-
-       // Batasi nilai maksimum
-       totalJailtime = Math.min(totalJailtime, maxJailtime);
-       totalFine = Math.min(totalFine, maxFine);
-       totalBail = Math.min(totalBail, maxBail);
-
-       let command = totalJailtime === 0 && totalBail === 0 ?
-           `/ticket ${$("#suspectid").val()} ${totalFine} [violation]` :
-           `/arrest ${$("#suspectid").val()} ${totalJailtime} ${totalFine} ${totalBail}`;
-       $("#arrest").val(command);
-   }
-
+      let totalJailtime = 0;
+      let totalFine = 0;
+      let totalBail = 0;
+      let totalCount = 0;
+  
+      $("#violate-select tbody tr").each(function () {
+          totalJailtime += parseInt($(this).find("td:nth-child(3)").text(), 10);
+          totalFine += parseInt($(this).find("td:nth-child(4)").text(), 10);
+          totalBail += parseInt($(this).find("td:nth-child(5)").text(), 10);
+          totalCount++;
+      });
+  
+      // Batasi nilai maksimum
+      totalJailtime = Math.min(totalJailtime, maxJailtime);
+      totalFine = Math.min(totalFine, maxFine);
+      totalBail = Math.min(totalBail, maxBail);
+  
+      // Update total summary
+      $("#total-count").text(totalCount + " Charges");
+      $("#total-jailtime").text(totalJailtime + " Minutes");
+      $("#total-fine").text("$" + totalFine);
+      $("#total-bail").text("$" + totalBail);
+  
+      let command = totalJailtime === 0 && totalBail === 0 ?
+          `/ticket ${$("#suspectid").val()} ${totalFine} [violation]` :
+          `/arrest ${$("#suspectid").val()} ${totalJailtime} ${totalFine} ${totalBail}`;
+      $("#arrest").val(command);
+  }
    
    // Fitur pencarian multiple
        let debounceTimer;
@@ -1028,49 +1035,48 @@ $("#clear-search").click(function () {
 });
 
    // Tombol Clear All
-$("#clear-violations").click(function () {
-    if ($("#violate-select tbody tr").length === 0) {
-        Swal.fire({
-            title: "❌ Oops!",
-            text: "Tidak ada data yang bisa dihapus.",
-            icon: "info",
-            background: "#1e1e1e",
-            color: "#fff",
-            confirmButtonColor: "#ffc107"
-        });
-        return;
-    }
-
-    Swal.fire({
-        title: "⚠️ Are you sure?",
-        text: "Kamu yakin ingin menghapus semua data?",
-        icon: "warning",
-        background: "#1e1e1e",
-        color: "#fff",
-        showCancelButton: true,
-        confirmButtonColor: "#28a745",
-        cancelButtonColor: "#dc3545",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, cancel"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $("#violate-select tbody").empty(); // Kosongkan daftar
-            updateArrestCommand(); // Perbarui command
-            $(".btn-success").prop("disabled", false); // Aktifkan kembali semua tombol "Add"
-
-            Swal.fire({
-                title: "✅ Deleted!",
-                text: "Semua data telah dihapus.",
-                icon: "success",
-                background: "#1e1e1e",
-                color: "#fff",
-                timer: 2000,
-                showConfirmButton: false
-            });
-        }
-    });
-});
-
+   $("#clear-violations").click(function () {
+      if ($("#violate-select tbody tr").length === 0) {
+          Swal.fire({
+              title: "❌ Oops!",
+              text: "Tidak ada data yang bisa dihapus.",
+              icon: "info",
+              background: "#1e1e1e",
+              color: "#fff",
+              confirmButtonColor: "#ffc107"
+          });
+          return;
+      }
+  
+      Swal.fire({
+          title: "⚠️ Are you sure?",
+          text: "Kamu yakin ingin menghapus semua data?",
+          icon: "warning",
+          background: "#1e1e1e",
+          color: "#fff",
+          showCancelButton: true,
+          confirmButtonColor: "#28a745",
+          cancelButtonColor: "#dc3545",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, cancel"
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $("#violate-select tbody").empty(); // Kosongkan daftar
+              updateArrestCommand(); // Perbarui command dan total summary
+              $(".btn-success").prop("disabled", false); // Aktifkan kembali semua tombol "Add"
+  
+              Swal.fire({
+                  title: "✅ Deleted!",
+                  text: "Semua data telah dihapus.",
+                  icon: "success",
+                  background: "#1e1e1e",
+                  color: "#fff",
+                  timer: 2000,
+                  showConfirmButton: false
+              });
+          }
+      });
+  });
 
    // Tombol Scroll to Top
    $(window).scroll(function () {
