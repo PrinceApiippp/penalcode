@@ -909,7 +909,7 @@ $(document).ready(function () {
               href: `https://police.san-andreas.net/viewtopic.php?t=148639#:~:text=${formattedCode}`,
               target: "_blank",
               rel: "noopener noreferrer",
-              html: '<i class="fas fa-paper-plane"></i>'
+              html: '<i class="fas fa-external-link-alt"></i>'
           });
   
           // Tambahkan tombol link ke dalam reffCell
