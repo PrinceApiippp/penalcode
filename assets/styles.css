@@ -198,3 +198,7 @@ button:active {
     font-size: 1.2rem;
     color: #ffcc00;
 }
+
+.center-align {
+    text-align: center;
+}

@@ -858,38 +858,68 @@ $(document).ready(function () {
 
    // Fungsi untuk menampilkan data pelanggaran
    function renderViolations(data) {
-       tableBody.empty();
-       if (data.length > 0) {
-           $("#add-all").removeClass("d-none");
-       } else {
-           $("#add-all").addClass("d-none");
-       }
-       $.each(data, function (index, charge) {
-           let row = $("<tr></tr>");
-           row.append($("<td></td>").text(charge.code));
-           row.append($("<td></td>").text(charge.name));
-           row.append($("<td></td>").text(charge.jailtime));
-           row.append($("<td></td>").text(charge.fine));
-           row.append($("<td></td>").text(charge.bail));
-
-           let buttonCell = $("<td></td>");
-           let addButton = $('<button type="button" class="btn btn-sm btn-success">Add</button>')
-               .attr("data-code", charge.code)
-               .click(function () {
-                   addViolation(charge);
-                   $(this).prop("disabled", true);
-               });
-           
-           if ($(`#violate-select tbody tr td:first-child:contains('${charge.code}')`).length > 0) {
-               addButton.prop("disabled", true);
-           }
-           
-           buttonCell.append(addButton);
-           row.append(buttonCell);
-
-           tableBody.append(row);
-       });
-   }
+      tableBody.empty();
+      if (data.length > 0) {
+          $("#add-all").removeClass("d-none");
+      } else {
+          $("#add-all").addClass("d-none");
+      }
+      $.each(data, function (index, charge) {
+          let row = $("<tr></tr>");
+  
+          // Kolom # Charge Code
+          row.append($("<td></td>").text(charge.code));
+  
+          // Kolom Violation (charge.name)
+          row.append($("<td></td>").text(charge.name));
+  
+          // Kolom Jailtime 
+          row.append($("<td></td>").addClass("text-center").text(charge.jailtime));
+  
+          // Kolom Fine 
+          row.append($("<td></td>").addClass("text-center").text(charge.fine));
+  
+          // Kolom Bail 
+          row.append($("<td></td>").addClass("text-center").text(charge.bail));
+  
+          // Kolom Action (Tombol Add)
+          let actionCell = $("<td></td>").addClass("text-center");
+          let addButton = $('<button type="button" class="btn btn-sm btn-success">Add</button>')
+              .attr("data-code", charge.code)
+              .click(function () {
+                  addViolation(charge);
+                  $(this).prop("disabled", true);
+              });
+  
+          if ($(`#violate-select tbody tr td:first-child:contains('${charge.code}')`).length > 0) {
+              addButton.prop("disabled", true);
+          }
+  
+          actionCell.append(addButton);
+          row.append(actionCell);
+  
+          // Kolom Reff (Tombol Link)
+          let reffCell = $("<td></td>").addClass("text-center");
+  
+          // Format charge.code
+          let formattedCode = charge.code.replace(/^(\d+)([A-Za-z]).*/, '($1) $2');
+  
+          // Buat tombol link dengan formattedCode
+          let linkButton = $('<a></a>', {
+              href: `https://police.san-andreas.net/viewtopic.php?t=148639#:~:text=${formattedCode}`,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              html: '<i class="fas fa-paper-plane"></i>'
+          });
+  
+          // Tambahkan tombol link ke dalam reffCell
+          reffCell.append(linkButton);
+          row.append(reffCell);
+  
+          // Tambahkan baris ke dalam tabel
+          tableBody.append(row);
+      });
+  }
 
 // Fungsi untuk menambahkan pelanggaran ke tabel yang dipilih
 function addViolation(charge) {
