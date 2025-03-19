@@ -86,17 +86,17 @@ $(document).ready(function () {
            },
            {
               code: "1E.1.",
-              name: "Driving any lorry without official trucking licenses",
-              jailtime: "30",
-              fine: "500",
-              bail: "3000"
-           },
-           {
-              code: "1E.2.",
               name: "Driving any truck without official trucking licenses",
               jailtime: "30",
               fine: "1500",
               bail: "9000"
+           },
+           {
+              code: "1E.2.",
+              name: "Driving any lorry without official trucking licenses",
+              jailtime: "30",
+              fine: "500",
+              bail: "3000"
            },
            {
               code: "1F.1.",
